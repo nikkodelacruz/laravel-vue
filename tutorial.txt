@@ -1,0 +1,165 @@
+
+*install laravel via composer
+composer create-project laravel/laravel appname
+
+*set virtual host
+
+<VirtualHost *:80>
+    DocumentRoot "C:/laragon/www"
+    ServerName localhost
+</VirtualHost>
+
+<VirtualHost *:80>
+    DocumentRoot "C:/laragon/www/laravelVue/public/"
+    ServerName laravelVue.dev
+</VirtualHost>
+
+127.0.0.1      localhost
+127.0.0.1      laravelVue.dev
+
+
+File structure:
+MVC
+App folder -> all models
+http -> controller.php = core controller
+
+
+
+
+
+
+*create new controller class
+php artisan make:controller PagesController
+---
+*rename APP_NAME in .env
+call by {{config('app.name', 'laravue')}} -> second param if it's not there
+---
+*npm install
+---
+*The Bootstrap and Vue scaffolding provided by Laravel is located in the laravel/ui Composer package, which may be installed using Composer:
+
+composer require laravel/ui
+---
+*Once the laravel/ui package has been installed, you may install the frontend scaffolding using the ui Artisan command:
+
+// Generate basic scaffolding...
+php artisan ui bootstrap
+php artisan ui vue
+php artisan ui react
+
+// Generate login / registration scaffolding...(optional)
+php artisan ui bootstrap --auth
+php artisan ui vue --auth
+php artisan ui react --auth
+---
+*install updated dependencies
+npm install
+---
+import bootstrap css to app.scss
+@import "variables"
+@import "node_modules/bootstrap/scss/bootstrap";
+--
+*compile webpack.mix.js
+npm run dev
+this will compile and create app.css in public->css folder
+
+*for  watch
+npm run watch
+----
+Models and DB Migration
+create database
+
+php artisan make:controller PostsController
+--
+*create eloquent model class
+php artisan make:model Post -m (create migration)
+
+--
+*fix error about max length -> app/providers/appserviceprovider
+use Illuminate\Support\Facades\Schema
+boot -> 
+Schema::defaultStringLength(191) //set number of characters
+--
+*set database name in .env file
+* run migration
+php artisan migrate
+--
+*insert data, select data
+php artisan tinker
+*can interact with db with eloquent which is an ORM
+*eloquent -> access model/ add data to database
+App\Post::count()
+$post = new App\Post();
+$post->title = 'Post1';
+$post->body = "lorem";
+$post->save(); // save to db
+---
+*Add functions index,create,store etc.
+php artisan make:controller PostsController --resource 
+
+--
+*show what routes we have in application
+*show all the routes
+php artisan route:list 
+
+--
+
+*Forms & HTML
+https://laravelcollective.com/docs/6.0/html
+composer require laravelcollective/html
+
+--
+
+*Add text editor (ckeditor)
+composer require unisharp/laravel-ckeditor
+*publish
+php artisan vendor:publish --tag=ckeditor
+
+*Add this to composer.json
+"ckeditor/ckeditor": "4.*"
+*Execute command to run added package
+composer update
+
+
+NOTES:
+model = Post (created in migration: make:model) -> app folder
+view() = resources->views
+controller = PostsController = app->http->controllers
+routes = routes->web.php
+--
+-Pass parameter
+*Method 1
+$a = 'lorem';
+$b = 'ipsum';
+view('page.index',compact('a','b'))
+
+*Method 2
+$title = 'test';
+$title2 = 'test';
+view('page.index')->with('title',$title)->with('title2',$title2);
+
+*Method 3 (array)
+$data = [
+	'title' => 'test',
+	'title2' => 'test2'
+];
+view('page.index')->with($data);
+
+*To display inside view
+{{$id}}
+
+--
+*see method type
+php artisan route:list 
+
+
+
+
+
+
+
+
+
+php artisan serve
+
+*artisan -> command line tool for laravel
